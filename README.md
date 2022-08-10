@@ -1,24 +1,29 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Getting started
 
-Things you may want to cover:
+To setup this API on your local, ensure you have ruby and rails installed and follow the steps:
 
 * Ruby version
+`ruby v3.1.0`
 
-* System dependencies
+* Rails version
+`rails v7.0.3.1`
 
-* Configuration
+* Database creation and initialization
 
-* Database creation
-
-* Database initialization
+```bash
+  rails db:create db:migrate db:seed
+```
 
 * How to run the test suite
+```bash
+  rspec
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+* How to start your localhost:3000 server
+```bash
+  rails s
+```
 
-* Deployment instructions
-
-* ...
+Now you can follow the [API documentation](https://rayancastro.notion.site/API-Documentation-2df9843a63da4a8a8742074292c4856c)
