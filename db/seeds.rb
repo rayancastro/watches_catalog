@@ -1,7 +1,15 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+Watch.destroy_all
+
+puts "Creating watch catalogue"
+
+watches_params = [
+  { name: "Rolex", unit_price_cents: 10000 },
+  { name: "Michael Kors", unit_price_cents: 8000 },
+  { name: "Swatch", unit_price_cents: 5000 },
+  { name: "Casio", unit_price_cents: 3000 }
+]
+
+Watch.create(watches_params)
+
+puts "You have #{Watch.count} watches."
+p Watch.all
