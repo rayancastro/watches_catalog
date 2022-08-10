@@ -37,6 +37,7 @@ class OrdersController < ApplicationController
 
       {
         watch_id: watch.id,
+        watch_name: watch.name,
         quantity: item[:quantity],
         unit_price: unit_price,
         total_price: total_price,
@@ -51,6 +52,7 @@ class OrdersController < ApplicationController
     order_final_price = order_items.sum { |i| i.dig(:final_price)}
 
     render json: {
+      order_identifier: SecureRandom.hex(4),
       order_items: order_items,
       curency: "USD",
       order_total_price: order_total_price,
