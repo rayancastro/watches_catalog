@@ -1,3 +1,4 @@
+DiscountRule.destroy_all
 Watch.destroy_all
 
 puts "Creating watch catalogue"
@@ -12,4 +13,16 @@ watches_params = [
 Watch.create(watches_params)
 
 puts "You have #{Watch.count} watches."
-p Watch.all
+
+puts "Creating discount rules"
+
+rolex = Watch.find_by(name: "Rolex")
+michael_kors = Watch.find_by(name: "Michael Kors")
+
+discount_rules_params = [
+  { watch: rolex, discount_quantity: 3, discounted_price_cents: 20000 },
+  { watch: michael_kors, discount_quantity: 2, discounted_price_cents: 12000 }
+]
+
+DiscountRule.create(discount_rules_params)
+puts "You have #{DiscountRule.count} discount rules."
