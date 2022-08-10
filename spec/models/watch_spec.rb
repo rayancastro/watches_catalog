@@ -17,6 +17,19 @@ RSpec.describe Watch, type: :model do
     expect(watch.errors[:name]).to include("can't be blank")
   end
 
+  it "is invalid with a non-unique name" do
+    watch = Watch.create(
+      name: "Rolex",
+      unit_price_cents: 4200
+    )
+
+    watch_2 = Watch.new(
+      name: "Rolex",
+    )
+    watch_2.valid?
+    expect(watch_2.errors[:name]).to include("has already been taken")
+  end
+
   it "is invalid without a unit_price_cents" do
     watch = Watch.new(
       unit_price_cents: nil,
