@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
     items = params[:items].group_by {|item| item[:watch_id] }.map do |watch_id, grouped_items|
       {
         watch_id: watch_id,
-        quantity: grouped_items.sum {|item| item[:quantity]}
+        quantity: grouped_items.sum {|item| item[:quantity].to_i }
       }
     end
 
