@@ -5,8 +5,16 @@ class OrdersController < ApplicationController
     # Raise error if no items are present
     raise CheckoutError::EmptyItems unless params[:items].present?
 
+    # Group all items with the same watch_id into one
+    items = params[:items].group_by {|item| item[:watch_id] }.map do |watch_id, grouped_items|
+      {
+        watch_id: watch_id,
+        quantity: grouped_items.sum {|item| item[:quantity]}
+      }
+    end
+
     # Calculate the order cost
-    order_items = params[:items].map do |item|
+    order_items = items.map do |item|
       # Raise error if item is invalid
       raise CheckoutError::InvalidItemQuantity unless item[:quantity].present? && item[:quantity].positive?
 
@@ -15,6 +23,7 @@ class OrdersController < ApplicationController
       unit_price = watch.unit_price_cents / 100.0
       total_price = unit_price * quantity
 
+      # Apply discounts
       if watch.discounted?
         discount_bundles =  quantity / watch.discount_rule.discount_quantity
         bundles_price = discount_bundles * watch.discount_rule.discounted_price_cents / 100.0
@@ -35,11 +44,12 @@ class OrdersController < ApplicationController
 			  final_price: final_price
       }
     end
+
+    # Respond a formatted JSON with the order details
     order_total_price = order_items.sum { |i| i.dig(:total_price)}
     order_applied_discount = order_items.sum { |i| i.dig(:applied_discount)}
     order_final_price = order_items.sum { |i| i.dig(:final_price)}
 
-    # Respond a formatted JSON with the order details
     render json: {
       order_items: order_items,
       curency: "USD",
