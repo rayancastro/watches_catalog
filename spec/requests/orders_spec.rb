@@ -12,7 +12,7 @@ RSpec.describe "Orders", type: :request do
     end
 
     it "calculates the proper order amount, with discounts" do
-      post checkout_orders_path, params: {
+      post checkout_api_v1_orders_path, params: {
         "items": [
           {
             "watch_id": discounted_watch_1.id,
@@ -36,7 +36,7 @@ RSpec.describe "Orders", type: :request do
     end
 
     it "properly groups multiple items with the same watch_id" do
-      post checkout_orders_path, params: {
+      post checkout_api_v1_orders_path, params: {
         "items": [
           {
             "watch_id": discounted_watch_1.id,

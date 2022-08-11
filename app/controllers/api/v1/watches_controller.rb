@@ -1,4 +1,4 @@
-class WatchesController < ApplicationController
+class Api::V1::WatchesController < Api::V1::BaseController
   def index
     @watches = Watch.all
 

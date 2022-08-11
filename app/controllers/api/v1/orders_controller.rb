@@ -1,4 +1,4 @@
-class OrdersController < ApplicationController
+class Api::V1::OrdersController < Api::V1::BaseController
   def checkout
     # Receive request with list of watches to order
 
@@ -18,10 +18,10 @@ class OrdersController < ApplicationController
       # Raise error if item is invalid
       raise CheckoutError::InvalidItemQuantity unless item[:quantity].present? && item[:quantity].positive?
 
-      watch = Watch.find(item.dig(:watch_id))
+      watch = Watch.find(item[:watch_id])
       quantity = item[:quantity]
       unit_price = watch.unit_price_cents / 100.0
-      total_price = unit_price * quantity
+      order_item_price = unit_price * quantity
 
       # Apply discounts
       if watch.discounted?
@@ -29,27 +29,27 @@ class OrdersController < ApplicationController
         bundles_price = discount_bundles * watch.discount_rule.discounted_price_cents / 100.0
 
         remaining_units = quantity % watch.discount_rule.discount_quantity
-        final_price = bundles_price + remaining_units * unit_price
+        discounted_price = bundles_price + remaining_units * unit_price
       end
 
-      final_price ||= total_price
-      applied_discount = total_price - final_price
+      discounted_price ||= order_item_price
+      applied_discount = order_item_price - discounted_price
 
       {
         watch_id: watch.id,
         watch_name: watch.name,
         quantity: item[:quantity],
         unit_price: unit_price,
-        total_price: total_price,
+        order_item_price: order_item_price,
         applied_discount: applied_discount,
-			  final_price: final_price
+			  discounted_price: discounted_price
       }
     end
 
     # Respond a formatted JSON with the order details
-    order_total_price = order_items.sum { |i| i.dig(:total_price)}
+    order_total_price = order_items.sum { |i| i.dig(:order_item_price)}
     order_applied_discount = order_items.sum { |i| i.dig(:applied_discount)}
-    order_final_price = order_items.sum { |i| i.dig(:final_price)}
+    order_final_price = order_items.sum { |i| i.dig(:discounted_price)}
 
     render json: {
       order_identifier: SecureRandom.hex(4),
