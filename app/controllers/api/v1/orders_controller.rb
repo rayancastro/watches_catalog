@@ -25,10 +25,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
 
       # Apply discounts
       if watch.discounted?
-        discount_bundles =  quantity / watch.discount_rule.discount_quantity
-        bundles_price = discount_bundles * watch.discount_rule.discounted_price_cents / 100.0
+        discount_bundles =  quantity / watch.discount_rule.bundle_size
+        bundles_price = discount_bundles * watch.discount_rule.bundle_price_cents / 100.0
 
-        remaining_units = quantity % watch.discount_rule.discount_quantity
+        remaining_units = quantity % watch.discount_rule.bundle_size
         discounted_price = bundles_price + remaining_units * unit_price
       end
 

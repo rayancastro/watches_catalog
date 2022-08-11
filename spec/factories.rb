@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :discount_rule do
     association :watch
-    discount_quantity { 1 }
-    discounted_price_cents { 1 }
+    bundle_size { 1 }
+    bundle_price_cents { 1 }
   end
 
   factory(:watch) do

@@ -20,8 +20,8 @@ rolex = Watch.find_by(name: "Rolex")
 michael_kors = Watch.find_by(name: "Michael Kors")
 
 discount_rules_params = [
-  { watch: rolex, discount_quantity: 3, discounted_price_cents: 20000 },
-  { watch: michael_kors, discount_quantity: 2, discounted_price_cents: 12000 }
+  { watch: rolex, bundle_size: 3, bundle_price_cents: 20000 },
+  { watch: michael_kors, bundle_size: 2, bundle_price_cents: 12000 }
 ]
 
 DiscountRule.create(discount_rules_params)

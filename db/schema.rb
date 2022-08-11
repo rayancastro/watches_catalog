@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_185956) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_11_110151) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "discount_rules", force: :cascade do |t|
     t.bigint "watch_id", null: false
-    t.integer "discount_quantity"
-    t.integer "discounted_price_cents"
+    t.integer "bundle_size"
+    t.integer "bundle_price_cents"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["watch_id"], name: "index_discount_rules_on_watch_id"

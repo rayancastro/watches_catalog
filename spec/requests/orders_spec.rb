@@ -7,8 +7,8 @@ RSpec.describe "Orders", type: :request do
     let(:regular_watch_1) { FactoryBot.create(:watch, unit_price_cents: 100000) }
 
     before do
-      FactoryBot.create(:discount_rule, watch: discounted_watch_1, discount_quantity: 3, discounted_price_cents: 800000)
-      FactoryBot.create(:discount_rule, watch: discounted_watch_2, discount_quantity: 2, discounted_price_cents: 300000)
+      FactoryBot.create(:discount_rule, watch: discounted_watch_1, bundle_size: 3, bundle_price_cents: 800000)
+      FactoryBot.create(:discount_rule, watch: discounted_watch_2, bundle_size: 2, bundle_price_cents: 300000)
     end
 
     it "calculates the proper order amount, with discounts" do
