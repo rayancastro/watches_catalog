@@ -6,17 +6,28 @@ class Api::V1::OrdersController < Api::V1::BaseController
     raise CheckoutError::EmptyItems unless params[:items].present?
 
     # Group all items with the same watch_id into one
-    items = params[:items].group_by {|item| item[:watch_id] }.map do |watch_id, grouped_items|
+    grouped_items = params[:items].group_by do |item|
+      # Check if item has mandatory params
+      begin
+        raise CheckoutError::InvalidItemQuantity unless item.dig(:quantity)&.present? && item[:quantity].to_i.positive?
+        raise CheckoutError::MissingWatchId unless item.dig(:watch_id).present?
+      rescue NoMethodError
+        raise CheckoutError::WrongItemFormat
+      end
+      item[:watch_id]
+    end
+
+    items = grouped_items.map do |watch_id, grouped_items|
       {
         watch_id: watch_id,
-        quantity: grouped_items.sum {|item| item[:quantity].to_i }
+        quantity: grouped_items.sum {|item| item[:quantity].to_i}
       }
     end
 
     # Calculate the order cost
     order_items = items.map do |item|
       # Raise error if item is invalid
-      raise CheckoutError::InvalidItemQuantity unless item[:quantity].present? && item[:quantity].positive?
+
 
       watch = Watch.find(item[:watch_id])
       quantity = item[:quantity]
